@@ -1,5 +1,9 @@
 {
-  "name": "my-v0-project",
+  "name": "my-v0-project",                         
+  "trustedDependencies": [
+  "@tailwindcss/oxide",
+  "sharp"
+]
   "version": "0.1.0",
   "private": true,
   "scripts": {
