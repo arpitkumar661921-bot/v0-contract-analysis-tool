@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   AlertTriangle,
-  DollarSign,
+  IndianRupee,
   FileText,
   Download,
   Share2,
@@ -19,6 +19,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useContractStore, type AnalyzedContract } from "@/lib/contract-store"
+import { convertToINR, usdToInr, formatINR, parseCurrencyValue } from "@/lib/currency"
 
 const mockContract: AnalyzedContract = {
   id: "demo",
@@ -64,25 +65,20 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
   const { contracts } = useContractStore()
   const [contract, setContract] = useState<AnalyzedContract | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isExporting, setIsExporting] = useState(false)
 
   useEffect(() => {
-    // Try to get contract from store
     const storedContract = contracts.get(contractId)
     if (storedContract) {
-      console.log("[v0] Found contract in store:", storedContract.name)
       setContract(storedContract)
     } else if (contractId === "new" || contractId === "demo") {
-      // Use mock data for demo
       setContract(mockContract)
     } else {
-      // Contract not found - check if it might still be in the store
-      console.log("[v0] Contract not found:", contractId)
       setContract(mockContract)
     }
     setLoading(false)
   }, [contractId, contracts])
 
-  // Subscribe to store updates
   useEffect(() => {
     const unsubscribe = useContractStore.subscribe((state) => {
       const updatedContract = state.contracts.get(contractId)
@@ -135,12 +131,39 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
 
   const riskInfo = getRiskLabel(contract.riskScore)
 
-  // Calculate total hidden fees
-  const totalHiddenFees = contract.hiddenFees.reduce((sum, fee) => {
-    const amount = fee.amount.replace(/[^0-9.]/g, "")
-    const num = Number.parseFloat(amount) || 0
-    return sum + num
+  const totalHiddenFeesUSD = contract.hiddenFees.reduce((sum, fee) => {
+    return sum + parseCurrencyValue(fee.amount)
   }, 0)
+  const totalHiddenFeesINR = usdToInr(totalHiddenFeesUSD)
+
+  const handleExportPDF = async () => {
+    if (!contract) return
+
+    setIsExporting(true)
+    try {
+      const response = await fetch("/api/export-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contract }),
+      })
+
+      if (!response.ok) throw new Error("Export failed")
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `contract-analysis-${contract.id}.html`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (error) {
+      console.error("Export error:", error)
+    } finally {
+      setIsExporting(false)
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -161,11 +184,11 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
+          <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={isExporting}>
+            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
             Export PDF
           </Button>
-          <Link href="/dashboard/chat">
+          <Link href={`/dashboard/chat?contractId=${contractId}`}>
             <Button size="sm">
               <MessageSquare className="h-4 w-4 mr-2" />
               Ask AI
@@ -174,7 +197,7 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
         </div>
       </div>
 
-      {/* Summary Cards */}
+      {/* Summary Cards - Updated to show INR */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6">
@@ -197,11 +220,11 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-primary/10">
-                <DollarSign className="h-5 w-5 text-primary" />
+                <IndianRupee className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Base Price</p>
-                <p className="text-2xl font-bold text-foreground">{contract.basePrice}</p>
+                <p className="text-2xl font-bold text-foreground">{convertToINR(contract.basePrice)}</p>
               </div>
             </div>
           </CardContent>
@@ -215,8 +238,8 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
               <div>
                 <p className="text-sm text-muted-foreground">Hidden Fees</p>
                 <p className="text-2xl font-bold text-destructive">
-                  {totalHiddenFees > 0
-                    ? `$${totalHiddenFees.toLocaleString()}+`
+                  {totalHiddenFeesINR > 0
+                    ? `${formatINR(totalHiddenFeesINR)}+`
                     : contract.hiddenFees.length > 0
                       ? "Found"
                       : "None"}
@@ -229,11 +252,11 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-warning/10">
-                <DollarSign className="h-5 w-5 text-warning" />
+                <IndianRupee className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">True Total</p>
-                <p className="text-2xl font-bold text-foreground">{contract.totalValue}</p>
+                <p className="text-2xl font-bold text-foreground">{convertToINR(contract.totalValue)}</p>
               </div>
             </div>
           </CardContent>
@@ -367,7 +390,7 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
                               : "text-foreground"
                         }`}
                       >
-                        {fee.amount}
+                        {convertToINR(fee.amount)}
                       </p>
                     </div>
                   ))}
@@ -376,7 +399,7 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
                     <div className="flex items-center justify-between">
                       <p className="font-semibold text-foreground">Estimated Total Hidden Fees</p>
                       <p className="text-xl font-bold text-destructive">
-                        {totalHiddenFees > 0 ? `$${totalHiddenFees.toLocaleString()}+` : "Variable"}
+                        {totalHiddenFeesINR > 0 ? `${formatINR(totalHiddenFeesINR)}+` : "Variable"}
                       </p>
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">* Some fees may depend on actual usage</p>
@@ -415,7 +438,9 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground mb-3">{risk.description}</p>
-                    <Link href="/dashboard/chat">
+                    <Link
+                      href={`/dashboard/chat?contractId=${contractId}&question=${encodeURIComponent(`Tell me more about the ${risk.title} in my contract and how to negotiate it.`)}`}
+                    >
                       <Button variant="outline" size="sm" className="gap-2 bg-transparent">
                         <MessageSquare className="h-4 w-4" />
                         Ask AI about this
@@ -439,49 +464,64 @@ export function ContractAnalysis({ contractId }: { contractId: string }) {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {contract.hiddenFees
-                .filter((f) => f.severity === "high")
-                .map((fee, index) => (
+              {contract.negotiationSuggestions && contract.negotiationSuggestions.length > 0 ? (
+                contract.negotiationSuggestions.map((suggestion, index) => (
                   <div key={index} className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                    <h4 className="font-medium text-foreground mb-2">Negotiate: {fee.name}</h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      This fee ({fee.amount}) may be negotiable. Consider asking for a reduction or cap.
-                    </p>
-                    <p className="text-xs text-primary font-medium">Potential savings: 10-25% reduction</p>
+                    <h4 className="font-medium text-foreground mb-2">Negotiate: {suggestion.clause}</h4>
+                    <p className="text-sm text-muted-foreground mb-3">{suggestion.suggestion}</p>
+                    <Badge
+                      variant={
+                        suggestion.priority === "high"
+                          ? "destructive"
+                          : suggestion.priority === "medium"
+                            ? "default"
+                            : "secondary"
+                      }
+                    >
+                      {suggestion.priority} priority
+                    </Badge>
                   </div>
-                ))}
+                ))
+              ) : (
+                <>
+                  {contract.hiddenFees
+                    .filter((f) => f.severity === "high")
+                    .map((fee, index) => (
+                      <div key={index} className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                        <h4 className="font-medium text-foreground mb-2">Negotiate: {fee.name}</h4>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          This fee ({convertToINR(fee.amount)}) may be negotiable. Consider asking for a reduction or
+                          cap.
+                        </p>
+                        <p className="text-xs text-primary font-medium">Potential savings: 10-25% reduction</p>
+                      </div>
+                    ))}
 
-              {contract.risks
-                .filter((r) => r.severity === "high")
-                .map((risk, index) => (
-                  <div key={index} className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                    <h4 className="font-medium text-foreground mb-2">Address: {risk.title}</h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      {risk.description}. Consider requesting modifications to this clause.
-                    </p>
-                    <p className="text-xs text-primary font-medium">Risk reduction: High</p>
-                  </div>
-                ))}
+                  {contract.risks
+                    .filter((r) => r.severity === "high")
+                    .map((risk, index) => (
+                      <div key={`risk-${index}`} className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                        <h4 className="font-medium text-foreground mb-2">Negotiate: {risk.title}</h4>
+                        <p className="text-sm text-muted-foreground mb-3">{risk.description}</p>
+                        <Link
+                          href={`/dashboard/chat?contractId=${contractId}&question=${encodeURIComponent(`How can I negotiate the ${risk.title} clause in my contract?`)}`}
+                        >
+                          <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+                            <MessageSquare className="h-4 w-4" />
+                            Get negotiation tips
+                          </Button>
+                        </Link>
+                      </div>
+                    ))}
 
-              {contract.hiddenFees.filter((f) => f.severity === "high").length === 0 &&
-                contract.risks.filter((r) => r.severity === "high").length === 0 && (
-                  <p className="text-muted-foreground text-center py-8">
-                    No major items requiring negotiation. This contract looks reasonable!
-                  </p>
-                )}
-
-              <div className="flex gap-2 pt-4">
-                <Button className="gap-2">
-                  <Download className="h-4 w-4" />
-                  Download Negotiation Script
-                </Button>
-                <Link href="/dashboard/chat">
-                  <Button variant="outline" className="gap-2 bg-transparent">
-                    <MessageSquare className="h-4 w-4" />
-                    Discuss with AI
-                  </Button>
-                </Link>
-              </div>
+                  {contract.hiddenFees.filter((f) => f.severity === "high").length === 0 &&
+                    contract.risks.filter((r) => r.severity === "high").length === 0 && (
+                      <p className="text-muted-foreground text-center py-8">
+                        No high-priority items to negotiate. This contract has favorable terms.
+                      </p>
+                    )}
+                </>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

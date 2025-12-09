@@ -22,6 +22,7 @@ import {
   BarChart3,
   Search,
   FileStack,
+  Shield,
 } from "lucide-react"
 
 const navItems = [
@@ -38,6 +39,8 @@ const navItems = [
   { href: "/dashboard/billing", icon: CreditCard, label: "Billing" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ]
+
+const adminNavItem = { href: "/dashboard/admin", icon: Shield, label: "Admin Panel" }
 
 export function DashboardSidebar() {
   const pathname = usePathname()
@@ -95,6 +98,22 @@ export function DashboardSidebar() {
                 </Link>
               )
             })}
+
+            <div className="pt-4 mt-4 border-t border-border">
+              <Link
+                href={adminNavItem.href}
+                onClick={() => setMobileOpen(false)}
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+                  pathname === adminNavItem.href
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted",
+                )}
+              >
+                <adminNavItem.icon className="h-5 w-5" />
+                {adminNavItem.label}
+              </Link>
+            </div>
           </nav>
 
           <div className="p-4 border-t border-border">
