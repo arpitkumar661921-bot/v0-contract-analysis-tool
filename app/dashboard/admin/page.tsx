@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { usePaymentStore, type PaymentRequest } from "@/lib/payment-store"
 import { CheckCircle, XCircle, Clock, Eye, Shield, Users, TrendingUp, AlertTriangle } from "lucide-react"
 
-const ADMIN_PASSWORD = "ContractScan@2024"
+const ADMIN_PASSWORD = "ContractLens@2024"
 
 export default function AdminPage() {
   const { paymentRequests, approvePayment, rejectPayment, getPendingPayments } = usePaymentStore()

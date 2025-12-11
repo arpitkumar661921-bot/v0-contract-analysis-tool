@@ -10,7 +10,7 @@ export async function POST(req: Request) {
       )
     }
 
-    const systemPrompt = `You are an expert wedding/event contract analyst for ContractScan.
+    const systemPrompt = `You are an expert wedding/event contract analyst for ContractLens.
 
 CRITICAL RULES:
 1. ALL monetary amounts MUST be in Indian Rupees (₹)

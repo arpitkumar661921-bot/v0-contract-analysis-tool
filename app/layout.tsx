@@ -8,11 +8,11 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "ContractScan - AI-Powered Contract Analysis for Wedding & Events",
+  title: "ContractLens - AI-Powered Contract Analysis for Wedding & Events",
   description:
     "Detect hidden fees, compare venues, and get AI-powered insights for your event contracts. Trusted by wedding planners and couples worldwide.",
   keywords: ["contract analysis", "wedding contracts", "hidden fees", "venue comparison", "event planning"],
-    generator: 'v0.app'
+  generator: "v0.app",
 }
 
 export default function RootLayout({

@@ -12,7 +12,7 @@ export default function DemoPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <FileSearch className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold text-foreground">ContractScan</span>
+            <span className="text-xl font-bold text-foreground">ContractLens</span>
           </Link>
           <div className="flex items-center gap-4">
             <Link href="/login">
@@ -29,7 +29,7 @@ export default function DemoPage() {
 
       <main className="container mx-auto px-4 py-16">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-foreground mb-4">See ContractScan in Action</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-4">See ContractLens in Action</h1>
           <p className="text-lg text-muted-foreground mb-12">
             Watch how our AI analyzes contracts to detect hidden fees, calculate true costs, and provide negotiation
             tips.

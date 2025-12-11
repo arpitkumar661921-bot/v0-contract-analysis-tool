@@ -11,7 +11,7 @@ export function Footer() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <FileSearch className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-foreground">ContractScan</span>
+              <span className="text-xl font-bold text-foreground">ContractLens</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-xs">
               AI-powered contract analysis for wedding planners and couples. Detect hidden fees, compare venues, and
@@ -94,7 +94,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">© 2025 ContractScan. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© 2025 ContractLens. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Twitter

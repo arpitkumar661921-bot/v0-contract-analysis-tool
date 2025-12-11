@@ -69,7 +69,7 @@ export default function SubscribePage() {
     const details = `Account Name: ${BANK_DETAILS.accountName}
 Account Number: ${BANK_DETAILS.accountNumber}
 IFSC Code: ${BANK_DETAILS.ifscCode}
-Payment Note: Subscription for ContractScan User`
+Payment Note: Subscription for ContractLens User`
     navigator.clipboard.writeText(details)
     setCopiedField("all")
     setTimeout(() => setCopiedField(null), 2000)
@@ -236,7 +236,7 @@ Payment Note: Subscription for ContractScan User`
                   <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
                     <p className="text-sm text-muted-foreground">Payment Note (Add this to your transfer)</p>
                     <p className="font-medium text-foreground">
-                      Subscription for ContractScan - {PLANS[selectedPlan].name}
+                      Subscription for ContractLens - {PLANS[selectedPlan].name}
                     </p>
                   </div>
                 </div>

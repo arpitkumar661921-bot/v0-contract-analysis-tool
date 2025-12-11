@@ -1,4 +1,4 @@
-# ContractScan - Wedding Venue Contract Analysis Tool
+# ContractLens - Wedding Venue Contract Analysis Tool
 
 AI-powered platform to analyze wedding venue contracts, detect hidden fees, and help users make informed decisions.
 
@@ -81,7 +81,7 @@ npm start
 
 ### For Admin
 1. Go to `/dashboard/admin`
-2. Login with password (default: `ContractScan@2024`)
+2. Login with password (default: `ContractLens@2024`)
 3. Review pending payments
 4. Approve/reject with notes
 5. Monitor revenue and subscription stats

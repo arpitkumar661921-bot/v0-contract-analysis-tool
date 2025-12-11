@@ -288,7 +288,7 @@ export function TeamManagement() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Invite Team Member</DialogTitle>
-            <DialogDescription>Send an invitation to join your team on ContractScan.</DialogDescription>
+            <DialogDescription>Send an invitation to join your team on ContractLens.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">

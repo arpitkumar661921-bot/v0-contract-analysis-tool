@@ -22,7 +22,7 @@ Your app has a complete payment verification system where users pay you directly
 
 ### For You (Admin):
 1. Go to `/dashboard/admin`
-2. Login password: `ContractScan@2024` (you can change this in the code)
+2. Login password: `ContractLens@2024` (you can change this in the code)
 3. Review pending payments with screenshots
 4. Approve or reject payments
 5. When approved, user's plan is automatically activated
@@ -81,7 +81,7 @@ When users pay:
 
 ## Customization
 
-To change admin password, edit line 8 in `/app/dashboard/admin/page.tsx`:
+To change admin password, edit line 13 in `/app/dashboard/admin/page.tsx`:
 \`\`\`typescript
 const ADMIN_PASSWORD = "YourNewPassword123"
 \`\`\`
@@ -104,7 +104,7 @@ const BANK_DETAILS = {
 4. Upload a screenshot
 5. Submit
 6. Go to `/dashboard/admin`
-7. Login with password: `ContractScan@2024`
+7. Login with password: `ContractLens@2024`
 8. Review and approve the payment
 9. Go back to billing page - subscription should now be active
 

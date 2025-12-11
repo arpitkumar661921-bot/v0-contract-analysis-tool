@@ -32,7 +32,7 @@ export function HowItWorksSection() {
     <section id="how-it-works" className="py-20 md:py-32 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 text-balance">How ContractScan Works</h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 text-balance">How ContractLens Works</h2>
           <p className="text-lg text-muted-foreground text-pretty">
             Get from confusion to clarity in four simple steps
           </p>

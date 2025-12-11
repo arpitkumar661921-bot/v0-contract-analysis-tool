@@ -65,7 +65,7 @@ export function HeroSection() {
                 <div className="w-3 h-3 rounded-full bg-warning/60" />
                 <div className="w-3 h-3 rounded-full bg-success/60" />
               </div>
-              <span className="text-xs text-muted-foreground ml-2">ContractScan Dashboard</span>
+              <span className="text-xs text-muted-foreground ml-2">ContractLens Dashboard</span>
             </div>
             <div className="p-6 bg-card">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

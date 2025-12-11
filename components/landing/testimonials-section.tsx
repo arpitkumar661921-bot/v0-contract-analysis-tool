@@ -3,7 +3,7 @@ import { Star } from "lucide-react"
 export function TestimonialsSection() {
   const testimonials = [
     {
-      quote: "ContractScan saved me over $3,000 on my wedding venue. I had no idea there were so many hidden fees!",
+      quote: "ContractLens saved me over $3,000 on my wedding venue. I had no idea there were so many hidden fees!",
       author: "Sarah M.",
       role: "Bride, NYC",
       rating: 5,
@@ -29,7 +29,7 @@ export function TestimonialsSection() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 text-balance">Trusted by thousands</h2>
           <p className="text-lg text-muted-foreground text-pretty">
-            See what wedding planners and couples say about ContractScan
+            See what wedding planners and couples say about ContractLens
           </p>
         </div>
 

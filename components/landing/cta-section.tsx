@@ -11,7 +11,7 @@ export function CTASection() {
             Ready to uncover hidden fees?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty">
-            Join 10,000+ wedding planners and couples who trust ContractScan. Start your free trial today - no credit
+            Join 10,000+ wedding planners and couples who trust ContractLens. Start your free trial today - no credit
             card required.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

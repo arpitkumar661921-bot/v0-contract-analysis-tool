@@ -77,7 +77,7 @@ export const usePaymentStore = create<PaymentStore>()(
         get().paymentRequests.find((p) => p.userEmail === email && p.status === "approved"),
     }),
     {
-      name: "contractscan-payments",
+      name: "contractlens-payments",
     },
   ),
 )
